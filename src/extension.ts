@@ -1,26 +1,83 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
+import { log } from 'console';
 import * as vscode from 'vscode';
+import fs from 'fs';
+import path from 'path';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+	let disposable = vscode.commands.registerCommand('bpy-docs-finder.openBPYDoc', async () => {
+		const editor = vscode.window.activeTextEditor;
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "bpy-docs-finder" is now active!');
+		if (!editor) {
+			vscode.window.showInformationMessage('No editor is active');
+			return;
+		}
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('bpy-docs-finder.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from BPY Docs Finder!');
-	});
+		const selection = editor.selection;
+		const position = selection.start;
+		const document = editor.document;
+		const text = document.getText(selection);
+
+		if (!text) {
+			vscode.window.showInformationMessage('No text is selected');
+			return;
+		}
+
+		const locations = await vscode.commands.executeCommand<vscode.Location[]>(
+			'vscode.executeDefinitionProvider',
+			document.uri,
+			position
+		);
+
+		if (!locations || locations.length === 0) {
+			vscode.window.showInformationMessage('No definition found for the selected text');
+			return;
+		}
+
+		// Get the first location
+		const location = locations[0];
+
+		// Get the text of the line where the definition is found
+		const pyiFilePath = location.uri.with({ scheme: 'vscode' }).fsPath;
+
+		// Read the .pyi file
+		const pyiFileContent = fs.readFileSync(pyiFilePath, 'utf8');
+
+		// Split the file content into lines
+		const lines = pyiFileContent.split('\n');
+
+		// Initialize variables to store the current class and whether the attribute is found
+		let currentClass = null;
+		let attributeFound = false;
+
+		// Iterate over the lines
+		for (const line of lines) {
+			// Check if the line contains a class definition
+			const classMatch = line.match(/class\s+(\w+)/);
+			if (classMatch) {
+				// If it does, update the current class
+				currentClass = classMatch[1];
+			}
+
+			// Check if the line contains the selected attribute
+			if (line.includes(text)) {
+				// If it does, set attributeFound to true and break the loop
+				attributeFound = true;
+				break;
+			}
+		}
+
+		if (!attributeFound || !currentClass) {
+			vscode.window.showInformationMessage('No class found for the selected text');
+			return;
+		}
+		
+		const docUrl = `https://docs.blender.org/api/current/bpy.types.${currentClass}.html#bpy.types.${currentClass}.${text}`;
+		
+		// Open the URL in the default web browser
+		vscode.env.openExternal(vscode.Uri.parse(docUrl));
+	});	
 
 	context.subscriptions.push(disposable);
 }
 
-// This method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }

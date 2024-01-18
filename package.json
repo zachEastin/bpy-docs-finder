@@ -9,13 +9,15 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onLanguage:python"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "bpy-docs-finder.helloWorld",
-        "title": "Hello World"
+        "command": "bpy-docs-finder.openBPYDoc",
+        "title": "Open BPY Documentation"
       }
     ]
   },
