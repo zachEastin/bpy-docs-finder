@@ -2,7 +2,12 @@
   "name": "bpy-docs-finder",
   "displayName": "BPY Docs Finder",
   "description": "Quickly open up the BPY documentation pages based upon the selected variable",
-  "version": "0.0.1",
+  "author": "Zach Eastin",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zachEastin/bpy-docs-finder"
+  },
   "engines": {
     "vscode": "^1.85.0"
   },
