@@ -59,7 +59,7 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 
 			// Check if the line contains the selected attribute
-			if (line.includes(text)) {
+			if (line.includes(`${text}:`)) {
 				// If it does, set attributeFound to true and break the loop
 				attributeFound = true;
 				break;
@@ -81,3 +81,7 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 export function deactivate() { }
+
+
+// run `vsce package` to create the.vsix file
+// then `vsce publish` to actually publish it to the marketplace

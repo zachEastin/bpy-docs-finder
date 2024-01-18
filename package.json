@@ -3,6 +3,7 @@
   "displayName": "BPY Docs Finder",
   "description": "Quickly open up the BPY documentation pages based upon the selected variable",
   "author": "Zach Eastin",
+  "publisher": "zeastin",
   "version": "1.0.0",
   "repository": {
     "type": "git",

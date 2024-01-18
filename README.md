@@ -10,6 +10,10 @@ Select the bpy attribute and press `Ctrl+Shift+P` and type `Open BPY Documentati
 
 Users appreciate release notes as you update your extension.
 
+### 1.0.1
+
+Made sure to only search through text that ends with a `:` to better ensure it is an attribute not just something in the descriptions
+
 ### 1.0.0
 
 Initial release of BPY Docs Finder
