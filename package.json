@@ -4,7 +4,7 @@
   "description": "Quickly open up the BPY documentation pages based upon the selected variable",
   "author": "Zach Eastin",
   "publisher": "zeastin",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/zachEastin/bpy-docs-finder"
